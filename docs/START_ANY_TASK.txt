@@ -1,0 +1,6 @@
+WWL/1.0.0
+[IDEA] 
+[LOCKS] none
+[SPINE] BIBLE
+[TASK] Deliver a complete verbose summary of this system (parts, functions, features, abilities, capabilities) then execute SPINE_BIBLE in gated phases: work then deliver each phase.
+[NEXT] Proceed Phase 01 IDEA as if the Best Next Prompt for that phase was just delivered.

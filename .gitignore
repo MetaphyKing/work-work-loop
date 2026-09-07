@@ -1,0 +1,10 @@
+.wwl/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.DS_Store
+Thumbs.db
+*.corrupted_*
+harness_traceback.json
