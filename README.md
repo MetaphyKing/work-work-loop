@@ -130,4 +130,6 @@ python -m unittest engine.test_hybrid_gate_harness engine.test_hostile_break
 
 ## License
 
-MIT © 2026 Logan Smith / Metaphy LLC. See [LICENSE](LICENSE).
+Copyright 2026 Logan Smith / Metaphy LLC.
+
+Licensed under the Apache License, Version 2.0. See [LICENSE](LICENSE) and [NOTICE](NOTICE).
