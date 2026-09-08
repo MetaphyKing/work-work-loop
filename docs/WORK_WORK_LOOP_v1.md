@@ -149,13 +149,32 @@ Token for IFCH / another seat:
 
 ```
 BEGIN_WWL
-version=1.0.0
+version=1.1.0
 spine=BIBLE|BUILD
 phase=<N+1>
 of=<Y>
 locks=<comma list>
+tokens_in=<input tokens this phase consumed, integer, or UNKNOWN>
+tokens_out=<output tokens this phase produced, integer, or UNKNOWN>
+wake=<your own seat handle>
 proceed=Proceed Phase <N+1>
 END_WWL
+```
+
+**`tokens_in` / `tokens_out` are required.** The agent is the only place the number exists — no
+harness can recover it after the turn ends. Count one phase: the prompt you received through the
+delivery you just made. Write `UNKNOWN` if the runtime does not expose it; never estimate.
+
+**`wake` is optional and only means anything on a waking harness.** Present, carrying your own
+handle, it re-enters you for the next phase. Absent, the card is parked and the run stops — omitting
+it is how a run ENDS, and there is no separate stop token. A card written for another seat carries
+that seat's handle and does not wake you.
+
+The block must be the **last thing in the message**, with nothing after `END_WWL`. A waker arms only
+on a block that terminates the post, so a token quoted mid-message — in a receipt, an artifact, or
+this spec — cannot wake anyone by accident.
+
+```
 ```
 
 User message `continue` means: run the last BNP. No new intent.
@@ -183,7 +202,7 @@ After phase 20, START BUILD with locks. Do not restart BIBLE.
 |------|----------------|
 | **Gemini Notebook** | Standing kernel in the first message or custom instructions. Chat = deliver. Studio = artifact. User types `continue` or pastes BNP. |
 | **Grail** | One `grail next` per phase. Missing-list is the work. Do not read past STOP. |
-| **IFCH** | After GATE, self-@mention TOKENIZED_BNP so a later seat re-enters. Never block GATE if IFCH is down. |
+| **IFCH** | After GATE, self-@mention TOKENIZED_BNP **as the last block of the message** so a later seat — or you — re-enters. `wake=<own handle>` re-enters; omit it to park the card and stop. Never block GATE if IFCH is down. |
 | **Generic coding agent** | Kernel + START. Artifacts are files in the repo. |
 
 ---
@@ -212,7 +231,7 @@ That is an instance. The phone-bot example in the notes is another instance. The
 
 | Field | Value |
 |-------|--------|
-| Version | 1.0.0 |
-| Date | 2026-09-07 |
+| Version | 1.1.0 |
+| Date | 2026-09-08 |
 | Draft | `WORK_WORK_LOOP_DRAFT_V1.txt` |
 | Source notes | [notebook prompts](https://docs.google.com/document/d/1mGZJPpVvp8g4QgsoKX85EE0gnSxn6ED4ik8bFNDMDCs/edit) |

@@ -1,4 +1,4 @@
-WWL/1.0.0 DRAFT
+WWL/1.1.0 DRAFT
 NAME=Work Work Loop
 ROLE=standing kernel for any agent, any task
 LOAD=paste this entire block once as standing rules. Then send only START.
@@ -87,30 +87,43 @@ One primary artifact. Extra annexes allowed. Zero artifacts = fail S4.
 
 === BEST_NEXT_PROMPT ===
 Must contain:
-- WWL/1.0.0
+- WWL/1.1.0
 - Phase N+1 of Y name
 - Locked decisions so far (short)
 - Proceed Phase <N+1>
 If the agent has IFCH: after GATE, self-@mention with TOKENIZED_BNP so a later seat can re-enter. If no IFCH, skip hook. Do not block GATE on IFCH.
+The block MUST be the LAST thing in that message -- nothing after END_WWL. A waker arms on a block that TERMINATES the post, so a token quoted mid-message (a receipt, an artifact, this kernel) can never wake anyone by accident.
 
 === TOKENIZED_BNP ===
 BEGIN_WWL
-version=1.0.0
+version=1.1.0
 spine=BIBLE|BUILD
 phase=<N+1>
 of=<Y>
 locks=<comma list>
+tokens_in=<input tokens this phase consumed, integer, or UNKNOWN>
+tokens_out=<output tokens this phase produced, integer, or UNKNOWN>
+wake=<your own seat handle>
 proceed=Proceed Phase <N+1>
 END_WWL
+
+tokens_in / tokens_out: REQUIRED. You are the only place the number exists; no harness can
+recover it afterwards. Count one phase: from the prompt you received to the delivery you just
+made. Write UNKNOWN if your runtime does not expose it -- never estimate a number.
+
+wake: OPTIONAL, and ONLY meaningful on a waking harness (see HARNESS/IFCH). Present with your own
+handle = re-enter me for the next phase. ABSENT = park this card and stop. Omitting it is how a
+run ENDS; there is no separate stop token. A card written for a different seat carries that seat's
+handle and does not wake you.
 
 === HARNESS ===
 GRAIL: if grail CLI is present, one grail-next per phase; never read past STOP; missing-list is the work.
 GN / Notebook: chat delivery + Studio artifact. CONTINUE is the user's next message.
-IFCH: optional self-@mention of TOKENIZED_BNP.
+IFCH: optional self-@mention of TOKENIZED_BNP, posted as the LAST block of the message. wake=<own handle> re-enters; omit wake= to park the card and stop. Never block GATE on IFCH.
 GENERIC: this kernel plus START is enough.
 
 === START template (user fills IDEA; rest is fixed) ===
-WWL/1.0.0
+WWL/1.1.0
 [IDEA] <what to build or do, one block>
 [LOCKS] <optional non-negotiables; else none>
 [SPINE] BIBLE

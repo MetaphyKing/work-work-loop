@@ -116,7 +116,7 @@ python -m unittest engine.test_hybrid_gate_harness engine.test_hostile_break
 |------|--------------------------------------|
 | Gemini Notebook | Studio file + chat delivery. User pastes BNP or types `continue`. |
 | [Grail Kernel](https://github.com/MetaphyKing/grail-kernel) | One `grail next` per phase. Do not read past STOP. |
-| IFCH | Optional self-mention of a tokenized BNP so another seat can re-enter. Never block the gate if IFCH is down. |
+| IFCH | Optional self-mention of a tokenized BNP, posted as the **last block** of the message, so another seat — or the same one — can re-enter. `wake=<own handle>` re-enters; omit it to park and stop. Never block the gate if IFCH is down. |
 | Coding agent | Artifacts are files in the repo. |
 
 ---

@@ -1,4 +1,4 @@
-WWL/1.0.0
+WWL/1.1.0
 [IDEA] 
 [LOCKS] none
 [SPINE] BIBLE
