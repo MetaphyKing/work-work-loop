@@ -42,7 +42,7 @@ WWL separates **kernel** (always) from **spine** (task plan) from **instance loc
 | L1 | One phase at a time. No skip. Next phase only after CONTINUE. |
 | L2 | Work then Deliver. Do not merge. |
 | L3 | Chat delivery **and** one artifact, every phase. |
-| L4 | Score inbound and outbound. If `< 99`, improve until `>= 99`, then act. Intent stays. |
+| L4 | Score inbound and outbound. If `< 99`, improve until `>= 99`, then act. Intent stays. Cap 3 (Mini Fix Loop A). Fourth is L5 or STOP. See `docs/WWL_MFL.md`. |
 | L5 | Stay in context. Split into `Na > Nb > Nc` rather than truncating. Each subphase is a full cycle. |
 | L6 | Evidence over claims. Ungrounded material is tagged `UNGROUNDED`, not shipped as done. |
 | L7 | Exhaustion is not success. A full window is a split, not a complete. |
@@ -67,7 +67,7 @@ All six must hold or the output is not delivered:
 | S5 FIT | Fits context, or already split. |
 | S6 NEXT | BNP is paste-ready and re-enters WWL. |
 
-Fail path: rewrite, list what changed, rescore, then deliver. Do not ask permission to improve.
+Fail path: rewrite, list what changed, rescore, then deliver. Do not ask permission to improve. That rewrite loop is Mini Fix Loop A (cap 3). Fourth is L5 or STOP. After a green chamber, MFL-B files leftover bugs and waits for human CONTINUE. See `docs/WWL_MFL.md`.
 
 Recovery phrase if the inbound prompt is thin:
 
@@ -231,7 +231,8 @@ That is an instance. The phone-bot example in the notes is another instance. The
 
 | Field | Value |
 |-------|--------|
-| Version | 1.1.0 |
-| Date | 2026-09-08 |
+| Version | 1.1.1 |
+| Date | 2026-09-12 |
 | Draft | `WORK_WORK_LOOP_DRAFT_V1.txt` |
+| MFL | `docs/WWL_MFL.md` |
 | Source notes | [notebook prompts](https://docs.google.com/document/d/1mGZJPpVvp8g4QgsoKX85EE0gnSxn6ED4ik8bFNDMDCs/edit) |
