@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.1 — 2026-09-12
+
+- Mini Fix Loop addendum: `docs/WWL_MFL.md`. Names L4 `failed_attempts` as MFL-A (cap 3, this-chamber only) vs MFL-B (file bugs, human CONTINUE). Harness counters unchanged.
+
 ## 1.1.0 — 2026-09-08
 
 - `TOKENIZED_BNP` gains `tokens_in=` and `tokens_out=` (required; `UNKNOWN` if the runtime does not expose them, never an estimate). The agent is the only place a per-phase token count exists — no harness can recover it after the turn ends — so cost per phase is now readable straight off the card.
