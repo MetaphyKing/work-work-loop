@@ -1,0 +1,19 @@
+{
+  "version": "1.0.0",
+  "max_failed_attempts": 3,
+  "lazy_regex_patterns": [
+    "#\\s*TODO",
+    "//\\s*TODO",
+    "#\\s*rest\\s+of\\s+code",
+    "\\[insert\\s+code\\s+here\\]",
+    "<!--\\s*TODO\\s*-->"
+  ],
+  "weights": {
+    "S1_intent": 0.2,
+    "S2_scope": 0.15,
+    "S3_evidence": 0.25,
+    "S4_completeness": 0.15,
+    "S5_fit": 0.15,
+    "S6_next": 0.1
+  }
+}
