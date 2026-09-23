@@ -4,6 +4,7 @@ import unittest
 from pathlib import Path
 
 from wwl_phase.bind import bind
+from wwl_phase.spine import HARNESS_PATH, KERNEL_PATH
 
 
 class BindTests(unittest.TestCase):
@@ -31,3 +32,13 @@ class BindTests(unittest.TestCase):
             missing = bind(tmp, action="continue")
             self.assertFalse(missing["success"])
             self.assertIn("run card", missing["error"])
+
+    def test_default_paths_are_this_clone(self):
+        kernel = Path(KERNEL_PATH)
+        harness = Path(HARNESS_PATH)
+        self.assertEqual(kernel.parent.name, "docs")
+        self.assertEqual(kernel.name, "WORK_WORK_LOOP_DRAFT_V1.txt")
+        self.assertTrue(kernel.is_file())
+        self.assertEqual(harness.parent.name, "engine")
+        self.assertEqual(harness.name, "hybrid_gate_harness.py")
+        self.assertTrue(harness.is_file())

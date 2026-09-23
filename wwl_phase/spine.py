@@ -1,7 +1,21 @@
 """BIBLE and BUILD phase table. Jobs match Work Work Loop v1.1.0."""
 
-KERNEL_PATH = r"C:\dev\wwl\docs\WORK_WORK_LOOP_DRAFT_V1.txt"
-HARNESS_PATH = r"C:\dev\wwl\engine\hybrid_gate_harness.py"
+import os
+from pathlib import Path
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+
+
+def _named_path(env_name, relative):
+    override = os.environ.get(env_name, "").strip()
+    if override:
+        return str(Path(override).expanduser())
+    return str(REPO_ROOT / relative)
+
+
+# Defaults are this clone. WWL_KERNEL_PATH and WWL_HARNESS_PATH override them.
+KERNEL_PATH = _named_path("WWL_KERNEL_PATH", Path("docs") / "WORK_WORK_LOOP_DRAFT_V1.txt")
+HARNESS_PATH = _named_path("WWL_HARNESS_PATH", Path("engine") / "hybrid_gate_harness.py")
 
 # phase -> (name, slug, one-line job)
 BIBLE = {

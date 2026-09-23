@@ -1,11 +1,25 @@
 import json
+import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
 
 from wwl_phase.gate import path_inside, run_gate
+from wwl_phase.spine import HARNESS_PATH
 
-HARNESS = Path(r"C:\dev\wwl\engine\hybrid_gate_harness.py")
+HARNESS = Path(HARNESS_PATH)
+
+
+def _harness_ready():
+    if not HARNESS.is_file():
+        return False
+    probe = subprocess.run(
+        [sys.executable, str(HARNESS), "--help"],
+        capture_output=True,
+        text=True,
+    )
+    return probe.returncode == 0
 SCORES = {
     "S1_intent": 100,
     "S2_scope": 100,
@@ -38,7 +52,7 @@ class GateTests(unittest.TestCase):
             self.assertFalse(path_inside(root, ""))
             self.assertFalse(path_inside("", inside))
 
-    @unittest.skipUnless(HARNESS.exists(), "local harness missing")
+    @unittest.skipUnless(_harness_ready(), "local harness did not start")
     def test_valid_dry_run_then_publish(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
@@ -62,7 +76,7 @@ class GateTests(unittest.TestCase):
             again = run_gate(root, file_path, 1, "system-summary", SCORES, publish=published, dry_run=True)
             self.assertEqual(again["action"], "stop")
 
-    @unittest.skipUnless(HARNESS.exists(), "local harness missing")
+    @unittest.skipUnless(_harness_ready(), "local harness did not start")
     def test_malformed_scores_do_not_create_state(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
@@ -72,7 +86,7 @@ class GateTests(unittest.TestCase):
             self.assertTrue(result["retryable"])
             self.assertFalse((root / "wwl_state.json").exists())
 
-    @unittest.skipUnless(HARNESS.exists(), "local harness missing")
+    @unittest.skipUnless(_harness_ready(), "local harness did not start")
     def test_empty_skip_and_outside(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
@@ -104,7 +118,7 @@ class GateTests(unittest.TestCase):
             flagged = run_gate(root, lazy, 1, "system-summary", SCORES, dry_run=True)
             self.assertEqual(flagged["action"], "rewrite")
 
-    @unittest.skipUnless(HARNESS.exists(), "local harness missing")
+    @unittest.skipUnless(_harness_ready(), "local harness did not start")
     def test_third_low_score_splits(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

@@ -1,5 +1,12 @@
 # Changelog
 
+## Package organize: 2026-09-23
+
+- The Grok skill, workflow, start prompt and `wwl_phase` are part of the public layout. Defaults point at this clone: `docs/WORK_WORK_LOOP_DRAFT_V1.txt`, `engine/hybrid_gate_harness.py`, working directory = repository root.
+- The start prompt lives at `docs/grok-start-prompt.md`.
+- `assets/wwl-social.jpg` is a 1280 by 640 still made from `assets/wwl-hero.jpg`. The hero picture files are unchanged.
+- `pyproject.toml` names the `wwl_phase` package. No extra runtime dependencies.
+
 ## 1.1.0 — 2026-09-08
 
 - `TOKENIZED_BNP` gains `tokens_in=` and `tokens_out=` (required; `UNKNOWN` if the runtime does not expose them, never an estimate). The agent is the only place a per-phase token count exists — no harness can recover it after the turn ends — so cost per phase is now readable straight off the card.

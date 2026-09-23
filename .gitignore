@@ -1,4 +1,7 @@
 .wwl/
+runs/
+dist/
+.eggs/
 __pycache__/
 *.py[cod]
 *.egg-info/

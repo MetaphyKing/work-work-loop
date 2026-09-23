@@ -1,1 +1,16 @@
+# Assets
 
+Title and brand media. The README hero markup uses the first two files. Do not delete them.
+
+| File | Role |
+|------|------|
+| `wwl-hero-q68.webp` | Animated title. First source in the README `<picture>`. |
+| `wwl-hero.jpg` | Still title. Fallback image in that same `<picture>`. |
+| `wwl-hero.mp4` | Motion file the animated title was made from. |
+| `wwl-social.jpg` | 1280 by 640 social still, cropped from `wwl-hero.jpg`. |
+| `The_Work_Work_Loop.mp4` | Longer brand film. Original filename kept. |
+| `The_Work_Work_Loop_Framework.png` | Framework still. Original filename kept. |
+| `NotebookLM Mind Map (8).png` | Mind map still. Original filename kept. |
+| `How_Work_Work_Loop_Ends_AI_Chaos.m4a` | Audio. Original filename kept. |
+
+A copy of the audio also lives in `notebook_sources/` for the Gemini corpus.

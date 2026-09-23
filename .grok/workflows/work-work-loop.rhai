@@ -40,7 +40,7 @@ let wake = "";
 let skip_reason = ();
 
 if args == () {
-    pause("verification", "Pass args.action (start, continue, or stop), args.wwl_root, and args.idea when action is start.");
+    pause("verification", "Pass args.action (start, continue or stop), args.wwl_root and args.idea when action is start.");
 }
 if args.action != () { action = trimmed(args.action); }
 if args.wwl_root != () { root = trimmed(args.wwl_root); }
@@ -78,14 +78,15 @@ let spec = #{
     skip_reason: skip_reason,
 };
 let spec_json = json_encode(spec);
-let spec_file = "C:\\Users\\rl_sm\\AppData\\Local\\Temp\\wwl-bind-" + fingerprint(root + action) + ".json";
+let spec_file = root + "/.wwl-bind-spec.json";
+let pkg_note = "Run from the clone that contains wwl_phase. Set the working directory and PYTHONPATH to that clone. If WWL_PACKAGE_ROOT is set, use that directory instead. ";
 
 phase("Bind");
 let bind_prompt = "You are the Work Work Loop binder. Use the write tool and the shell. Do not describe the phase.";
 bind_prompt += " Write this JSON exactly to " + spec_file + " : ";
 bind_prompt += spec_json;
-bind_prompt += " Then run, with the working directory and PYTHONPATH set to C:\\dev\\work-work-loop: ";
-bind_prompt += "python -c \"import json,sys; from pathlib import Path; sys.path.insert(0, r'C:\\dev\\work-work-loop'); from wwl_phase.bind import bind; spec=json.loads(Path(r'" + spec_file + "').read_text(encoding='utf-8')); print(json.dumps(bind(spec['root'], action=spec['action'], idea=spec.get('idea') or None, locks=spec.get('locks'), spine=spec.get('spine'), skip_reason=spec.get('skip_reason'))))\"";
+bind_prompt += " Then " + pkg_note;
+bind_prompt += "python -c \"import json; from pathlib import Path; from wwl_phase.bind import bind; spec=json.loads(Path(r'" + spec_file + "').read_text(encoding='utf-8')); print(json.dumps(bind(spec['root'], action=spec['action'], idea=spec.get('idea') or None, locks=spec.get('locks'), spine=spec.get('spine'), skip_reason=spec.get('skip_reason'))))\"";
 bind_prompt += " Return that command's JSON object as your final answer. If the command fails, return {\"success\":false,\"error\":\"bind command failed\",\"retryable\":true,\"action\":\"stop\"}.";
 
 let bind_schema = #{
@@ -140,7 +141,7 @@ let run_idea = bound.output.idea;
 let run_spine = bound.output.spine;
 let run_of = bound.output.of;
 let run_locks = json_encode(bound.output.locks);
-let kernel = "C:\\dev\\wwl\\docs\\WORK_WORK_LOOP_DRAFT_V1.txt";
+let kernel = "docs/WORK_WORK_LOOP_DRAFT_V1.txt";
 log("SUCCESS bind phase " + phase_no.to_string());
 
 let known = true;
@@ -207,14 +208,14 @@ while attempt < 3 && published == false {
         phase("Author");
         let angel_jobs = [];
         angel_jobs.push(#{
-            prompt: "Read " + kernel + " with read_file. Propose the safe ShoulderAngels path for phase "
+            prompt: "Read " + kernel + " from the clone with read_file. If WWL_KERNEL_PATH is set, read that file instead. Propose the safe ShoulderAngels path for phase "
                 + phase_no.to_string() + " " + phase_name + ". Idea: " + json_encode(run_idea)
                 + ". Stay inside this phase. Return one paragraph.",
             label: "angel-safe",
             capability_mode: "read-only",
         });
         angel_jobs.push(#{
-            prompt: "Read " + kernel + " with read_file. Propose the bold ShoulderAngels path for phase "
+            prompt: "Read " + kernel + " from the clone with read_file. If WWL_KERNEL_PATH is set, read that file instead. Propose the bold ShoulderAngels path for phase "
                 + phase_no.to_string() + " " + phase_name + ". Idea: " + json_encode(run_idea)
                 + ". Stay inside this phase. Return one paragraph.",
             label: "angel-bold",
@@ -238,7 +239,7 @@ while attempt < 3 && published == false {
     }
 
     phase("Author");
-    let author_prompt = "Read " + kernel + " with read_file before you write. Author Work Work Loop phase ";
+    let author_prompt = "Read " + kernel + " from the clone with read_file before you write. If WWL_KERNEL_PATH is set, read that file instead. Author Work Work Loop phase ";
     author_prompt += phase_no.to_string() + " " + phase_name + " only. Job: " + job + ". Mode: " + mode + ".";
     author_prompt += " Idea: " + json_encode(run_idea) + ". Locks: " + run_locks + ".";
     author_prompt += " Write one UTF-8 markdown file at exactly " + draft_path + ".";
@@ -289,9 +290,9 @@ while attempt < 3 && published == false {
         } else {
             phase("Gate");
             let scores_json = json_encode(scorer.output.scores);
-            let scores_file = root + "\\drafts\\scores.json";
+            let scores_file = root + "/drafts/scores.json";
             let gate_prompt = "Write this JSON exactly to " + scores_file + " : " + scores_json;
-            gate_prompt += " Then from C:\\dev\\work-work-loop with PYTHONPATH set to that directory, run python -m wwl_phase gate";
+            gate_prompt += " Then " + pkg_note + "Run python -m wwl_phase gate";
             gate_prompt += " --root " + json_encode(root);
             gate_prompt += " --draft " + json_encode(draft_path);
             gate_prompt += " --phase " + phase_no.to_string();
@@ -309,7 +310,7 @@ while attempt < 3 && published == false {
                 last_action = gated.output.action;
             }
             if last_action == "dry_run" {
-                let publish_prompt = "From C:\\dev\\work-work-loop with PYTHONPATH set to that directory, run python -m wwl_phase gate";
+                let publish_prompt = pkg_note + "Run python -m wwl_phase gate";
                 publish_prompt += " --root " + json_encode(root);
                 publish_prompt += " --draft " + json_encode(draft_path);
                 publish_prompt += " --phase " + phase_no.to_string();
@@ -375,7 +376,7 @@ let tokens_out = "UNKNOWN";
 let tokens_used = "UNKNOWN";
 if known == true { tokens_used = token_sum.to_string(); }
 phase("Gate");
-let close_prompt = "From C:\\dev\\work-work-loop with PYTHONPATH set to that directory, run python -m wwl_phase close";
+let close_prompt = pkg_note + "Run python -m wwl_phase close";
 close_prompt += " --phase " + phase_no.to_string();
 close_prompt += " --spine " + run_spine;
 close_prompt += " --locks " + run_locks;
