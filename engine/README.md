@@ -14,3 +14,5 @@ python -m unittest test_hybrid_gate_harness test_hostile_break
 ```
 
 Run the unittest commands from this directory, or from the repo root as `python -m unittest engine.test_hybrid_gate_harness engine.test_hostile_break`.
+
+From the repository root, `python -m wwl_phase` calls `engine/hybrid_gate_harness.py`. `WWL_HARNESS_PATH` overrides that file.
