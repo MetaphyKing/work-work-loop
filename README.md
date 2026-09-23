@@ -93,7 +93,21 @@ core/                 Operating kernel PDF and blueprint
 engine/               Two-pass gating harness (stdlib Python)
 notebook_sources/     Corpus for Gemini Notebook
 assets/               Hero still, webp, and motion
+.grok/                Grok skill and workflow (BI7 package)
+wwl_phase/            Phase CLI used by that skill and workflow
+tests/                Unittest suite for wwl_phase
+WWL Workflow n Skill Start Prompt.md
 ```
+
+## Grok package
+
+The BI7 package is the skill, the workflow, the start prompt, and `wwl_phase`. Those files still name their own working paths: kernel `C:\dev\wwl\docs\WORK_WORK_LOOP_DRAFT_V1.txt`, harness `C:\dev\wwl\engine\hybrid_gate_harness.py`, package root `C:\dev\work-work-loop`.
+
+- Skill: [`.grok/skills/work-work-loop/SKILL.md`](.grok/skills/work-work-loop/SKILL.md). One phase, then stop. Gate only through `python -m wwl_phase`.
+- Workflow: [`.grok/workflows/work-work-loop.rhai`](.grok/workflows/work-work-loop.rhai). Same name. Bind, author, score, gate, then close.
+- Start prompt: [`WWL Workflow n Skill Start Prompt.md`](WWL%20Workflow%20n%20Skill%20Start%20Prompt.md). Five stages for one phase. A later `continue` is a new run.
+- CLI: `wwl_phase` version `1.1.0`. Subcommands `parse`, `bind`, `gate`, `close`.
+- Tests, from the package root named in the skill: `python -m unittest discover -s tests -t .`
 
 ---
 
