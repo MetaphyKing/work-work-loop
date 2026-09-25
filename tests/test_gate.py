@@ -130,3 +130,13 @@ class GateTests(unittest.TestCase):
                 actions.append(result["action"])
             self.assertEqual(actions, ["rewrite", "rewrite", "split"])
             self.assertFalse(run_gate(root, file_path, 1, "system-summary", LOW, dry_run=True)["retryable"])
+
+    @unittest.skipUnless(_harness_ready(), "local harness did not start")
+    def test_gate_without_scores(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            file_path = root / "drafts" / "scoreless.md"
+            draft(file_path, "# ML-COMPILED-REPORT\n## 0. STATUS & BNS FOR PRIME\n" + BODY)
+            res = run_gate(root, file_path, 1, "system-summary", scores=None, dry_run=True)
+            self.assertTrue(res["success"], res)
+            self.assertEqual(res["action"], "dry_run")

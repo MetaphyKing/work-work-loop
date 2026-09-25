@@ -5,6 +5,8 @@ from wwl_phase.spine import AXES
 
 
 def validate_scores(scores):
+    if scores is None:
+        return None
     if not isinstance(scores, dict) or not scores:
         return fail("scores must be a non-empty object with all six axes", True, action="rewrite")
     missing = [axis for axis in AXES if axis not in scores]

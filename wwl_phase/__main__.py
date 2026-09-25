@@ -13,13 +13,15 @@ from wwl_phase.token import close_phase, parse_locks
 
 
 def _load_scores(raw, path):
+    if not raw and not path:
+        return None
     if path:
         try:
             raw = Path(path).read_text(encoding="utf-8")
         except OSError as exc:
             return fail("scores file unreadable: {0}".format(exc), True, action="rewrite")
     if raw is None or not str(raw).strip():
-        return fail("scores must be a non-empty object with all six axes", True, action="rewrite")
+        return None
     try:
         return json.loads(raw)
     except json.JSONDecodeError as exc:

@@ -58,9 +58,10 @@ def run_gate(root, draft, phase, slug, scores, publish=None, dry_run=False, code
     if _already_gated(root, phase):
         return fail("phase {0} is already GATED_COMPLETE".format(phase), False, action="stop")
 
-    rejected = validate_scores(scores)
-    if rejected:
-        return rejected
+    if scores is not None:
+        rejected = validate_scores(scores)
+        if rejected:
+            return rejected
 
     harness_path = harness or HARNESS_PATH
     if not Path(harness_path).exists():
@@ -76,13 +77,13 @@ def run_gate(root, draft, phase, slug, scores, publish=None, dry_run=False, code
         str(phase),
         "--slug",
         slug,
-        "--scores",
-        json.dumps(scores),
         "--state",
         str(root_path / "wwl_state.json"),
         "--config",
         str(root_path / "wwl_config.json"),
     ]
+    if scores is not None:
+        command.extend(["--scores", json.dumps(scores)])
     if code:
         command.extend(["--code", str(code)])
     if publish:

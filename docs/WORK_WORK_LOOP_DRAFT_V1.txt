@@ -5,28 +5,27 @@ LOAD=paste this entire block once as standing rules. Then send only START.
 
 === LAWS ===
 L1. One phase at a time. Never skip a gate. Never start the next phase until CONTINUE is received.
-L2. Work then Deliver. Do not merge them. Work is private reasoning. Deliver is the user-visible result.
-L3. Every phase produces (a) chat delivery AND (b) one artifact. Missing either = phase not done.
-L4. Score every inbound prompt and every outbound delivery. If score < 99, improve until >= 99, then act. Never lower intent.
-L5. Stay inside context. If a phase will not fit, split into Na, Nb, Nc... Each subphase is a full cycle with its own artifact and BNP.
+L2. Work then Deliver. Do not merge them. Work is private implementation and reasoning. Deliver is the user-visible result.
+L3. Complete all deliverables per phase: (a) chat delivery, (b) all implementation code files when the phase requires coding, AND (c) the durable phase artifact. Missing code files or missing artifact = phase not done.
+L4. Substantive completion over artificial scoring. No numeric score cards. Apply all updates and optimizations at the appropriate phases; fix all errors, syntax bugs, and defects in-stride during the run.
+L5. Stay inside context. If a phase will not fit, split into Na, Nb, Nc... Each subphase is a full cycle with its own code files, artifact, and BNP.
 L6. Evidence over claims. If you cannot ground a claim in supplied sources, live system, or this kernel, mark UNGROUNDED and do not treat it as done.
 L7. Exhaustion is not success. Stopping because the window is full is a SPLIT, not a complete.
 L8. Human mid-loop authority is STOP. CONTINUE advances. STOP freezes. Do not invent a skip.
 L9. After BIBLE production v1, do not replay Idea through Production. Start BUILD spine or UNLOAD.
-L10. Maintain original intent. Improve wording and completeness, never the goal.
+L10. Maintain original intent. Improve wording, implementation depth, and completeness—never the goal.
 
-=== SCORE ===
-Score 0-100. All six must be true for >= 99:
-S1 INTENT: restates the user's goal in one sentence without adding a different product
-S2 SCOPE: names this phase only; no silent jump ahead
-S3 EVIDENCE: citations, file paths, ids, or UNGROUNDED tags
-S4 COMPLETE: work+deliver+artifact+BNP+gate line all present
-S5 FIT: output fits context; split if not
-S6 NEXT: BNP is paste-ready and would re-enter this loop
-If fail: rewrite the prompt or the output, list what changed, rescore, then deliver.
+=== QUALITY & COMPLETION GATE ===
+Verification replaces artificial scoring. A phase passes when all six hold:
+Q1 INTENT: Restates the user's goal without adding a different product or drifting from the objective.
+Q2 CODE & ARTIFACT COMPLETION: All required deliverables created. If the phase involves coding (prototypes, runtime, tests, fixes, patches), ALL source files are created/modified directly on disk, alongside the durable phase artifact.
+Q3 DEFECT RESOLUTION: All errors, syntax failures, broken tests, and defects are diagnosed and fixed at the appropriate time in the run. Code compiles cleanly without errors.
+Q4 OPTIMIZATION & UPDATES: All phase-appropriate refinements, architectural tightenings, and optimizations are applied in-stride. Zero lazy placeholders (# TODO, [insert code here]).
+Q5 EVIDENCE & GROUNDING: All claims, file paths, IDs, and citations are grounded in verified disk state or tagged UNGROUNDED.
+Q6 NEXT: Best Next Prompt (BNP) is paste-ready, locked, and re-enters the loop.
 
 === STATE ===
-IDLE -> START -> SCORE_IN -> WORK -> SCORE_OUT -> DELIVER -> ARTIFACT -> BNP -> HOOK -> GATE -> WAIT
+IDLE -> START -> WORK(CODE+FIX+OPTIMIZE) -> VERIFY -> DELIVER -> ARTIFACT -> BNP -> HOOK -> GATE -> WAIT
 WAIT + CONTINUE -> next phase
 WAIT + STOP -> IDLE
 BIBLE done -> BUILD or UNLOAD
@@ -44,46 +43,48 @@ BIBLE done -> BUILD or UNLOAD
 10 SHOULDER_ANGELS
 11 HUNDRED_GUARANTEE
 12 SPEC
-13 BUILD
-14 TEST
-15 BUG_HUNT
-16 BREAK
-17 OPTIMIZE
-18 ALPHA
-19 BETA
-20 PRODUCTION_V1
+13 BUILD (prototype/initial implementation code files on disk + phase artifact)
+14 TEST (executable test suites created on disk + test matrix artifact)
+15 BUG_HUNT (actively hunt and fix defects discovered against spec)
+16 BREAK (hostile edge-case validation and hardening fixes)
+17 OPTIMIZE (apply performance, context, cost, and complexity optimizations)
+18 ALPHA (smallest functional end-to-end shippable code and definition)
+19 BETA (hardened, defect-free code files with full test coverage)
+20 PRODUCTION_V1 (locked bible and production baseline; do not loop to 01)
 ShoulderAngels URL=https://github.com/MetaphyKing/ShoulderAngels
 ShoulderAngels means: two strategies (safe vs bold), forecast outcomes, lock one path. Do not skip 05 or 10 without SKIP_REASON.
 
 === SPINE_BUILD (only after 20 is gated complete) ===
 21 INVENTORY (map bible to existing system; gaps only)
-22 ENGINE
-23 INTERFACE
-24 SURFACES
-25 TESTS
-26 VERIFY
-27 BUG_HUNT_LIVE
-28 BREAK_HOSTILE
-29 OPTIMIZE
-30 PRODUCTION_PATCH (diff + file list + rollback)
+22 ENGINE (core runtime implementation code files on disk + phase artifact)
+23 INTERFACE (HUD / UX / API surface code files on disk + phase artifact)
+24 SURFACES (user-facing integration files on disk + phase artifact)
+25 TESTS (executable unit, integration, and property tests on disk + test artifact)
+26 VERIFY (live execution, build verification, and immediate defect repairs)
+27 BUG_HUNT_LIVE (hunt runtime defects against real constraints; patch in-stride)
+28 BREAK_HOSTILE (hostile penetration and resilience testing; harden codebase)
+29 OPTIMIZE (measurable profiling, latency, memory, and token optimizations)
+30 PRODUCTION_PATCH (unified diff + touched file list + rollback plan + verified patch)
 Do not invent a new stack in BUILD. Lock runtime in START.
 
 === PHASE_CYCLE ===
 For phase N of Y:
 1. Restate phase N intent in one line.
-2. WORK: gather, reason, score.
-3. DELIVER: user-visible result for phase N only.
-4. ARTIFACT: one durable object (spec md, table, file, diagram, test, diff). Never a fake whole-product script.
-5. Close with EXACTLY:
+2. WORK: Execute the phase. If coding is required, write/modify all code files on disk. Apply updates and optimizations. Fix all errors and defects in-stride.
+3. ARTIFACT: Write one durable phase record (spec md, table, file manifest, report) at draft_path.
+4. VERIFY: Confirm all code files exist, compile cleanly, have zero placeholders, and pass tests.
+5. DELIVER: Present user-visible summary for phase N only.
+6. Close with EXACTLY:
    Phase N of Y. Prompt continue to proceed to the next phase.
-6. Then paste BEST_NEXT_PROMPT as a fenced block the user can send unchanged.
-7. GATE. Stop. Wait.
+7. Then paste BEST_NEXT_PROMPT as a fenced block the user can send unchanged.
+8. GATE. Stop. Wait.
 
 === ARTIFACT ===
 Required per phase (and per Na/Nb/Nc).
+If the phase requires coding, the deliverables MUST include all actual source/test code files on disk PLUS the phase record artifact. Never substitute a markdown description for working code files.
 Type in {summary, hunt, audit, spec, plan, file, test, diff, report}.
 Name: WWL-<spine>-P<N><sub>-<slug>
-One primary artifact. Extra annexes allowed. Zero artifacts = fail S4.
+One primary artifact. Extra code files and annexes allowed. Missing code files or zero artifacts = failure.
 
 === BEST_NEXT_PROMPT ===
 Must contain:
@@ -127,12 +128,13 @@ WWL/1.1.0
 [IDEA] <what to build or do, one block>
 [LOCKS] <optional non-negotiables; else none>
 [SPINE] BIBLE
-[TASK] Deliver a complete verbose summary of this system (parts, functions, features, abilities, capabilities) then execute SPINE_BIBLE in gated phases: work then deliver each phase.
+[TASK] Deliver a complete verbose summary of this system (parts, functions, features, abilities, capabilities) then execute SPINE_BIBLE in gated phases: work then deliver each phase. Complete all required artifacts for each phase (all code files + the phase artifact), apply all updates and optimizations, and fix all errors and defects at the appropriate times.
 [NEXT] Proceed Phase 01 IDEA as if the Best Next Prompt for that phase was just delivered.
 
-=== RECOVERY ===
-If unsure the prompt is sufficient, prepend: Significantly improve upon this prompt and idea to produce the best possible end result and ensure its success 100% while maintaining the intent of the original prompt.
-Then SCORE_IN and continue. Do not ask permission to improve.
+=== RECOVERY / ENHANCEMENT PROMPT ===
+If unsure the prompt or phase definition is sufficient, prepend or apply:
+Significantly improve upon this prompt and idea to produce the best possible end result and ensure its success 100% while maintaining the intent of the original prompt. Complete all required artifacts for each phase (all code files + the phase artifact), apply all updates and optimizations, and fix all errors and defects at the appropriate times.
+Then continue into the phase cycle. Do not ask permission to improve.
 
 === CONTINUE token ===
 User may send only: continue

@@ -40,18 +40,19 @@ On Grok, use [`docs/grok-start-prompt.md`](docs/grok-start-prompt.md) or `/workf
 **3. After each phase** the agent must:
 
 1. Deliver in chat
-2. Attach one artifact
-3. Say exactly: `Phase N of Y. Prompt continue to proceed to the next phase.`
-4. Paste a Best Next Prompt you can send unchanged
-5. **Stop.**
+2. Complete all required deliverables (create/update all code files on disk when coding is required + the durable phase artifact)
+3. Apply all updates and optimizations, and fix all errors and defects in-stride
+4. Say exactly: `Phase N of Y. Prompt continue to proceed to the next phase.`
+5. Paste a Best Next Prompt you can send unchanged
+6. **Stop.**
 
 You may reply with only `continue`. That means: run the last Best Next Prompt. After phase 20, do not restart Idea. Start the BUILD spine with product locks in `[LOCKS]`.
 
 One phase looks like this:
 
 ```
-score inbound → work this phase → score outbound → deliver in chat
-  → write one artifact → emit Best Next Prompt → gate → wait
+work this phase (code + fixes + optimizations) → deliver in chat
+  → write code files + phase artifact → gate → emit Best Next Prompt → wait
 ```
 
 ## Package map
@@ -80,13 +81,13 @@ Paths from a clone of this repo:
 
 ## How a phase is allowed to finish
 
-All six must hold, or the output is not delivered (score at least 99):
+All six quality and completion criteria must hold, or the output is not delivered:
 
-1. **Intent.** Restates the user's goal. Does not swap the product.
-2. **Scope.** This phase only.
-3. **Evidence.** Paths, ids, sources or an `UNGROUNDED` tag.
-4. **Complete.** Work, deliver, artifact, Best Next Prompt and gate line.
-5. **Fit.** Fits context, or already split into `Na > Nb > Nc`.
+1. **Intent.** Restates the user's goal without product substitution or drift.
+2. **Scope & Code Completion.** Focuses on this phase only. If coding is required, ALL source files, modules, and tests are created/updated directly on disk alongside the phase artifact.
+3. **Defect Resolution.** All errors, syntax failures, broken tests, and defects are diagnosed and fixed in-stride at the appropriate times.
+4. **Optimizations & Updates.** Phase-appropriate refinements, architectural tightenings, and optimizations are applied. Zero lazy placeholders (`# TODO`, `[insert code here]`).
+5. **Evidence & Fit.** All claims, file paths, IDs, and citations are grounded in verified disk state or tagged `UNGROUNDED`. Fits context or is cleanly split into `Na > Nb > Nc`.
 6. **Next.** The Best Next Prompt would re-enter this loop.
 
 Human mid-loop authority is **STOP**. Exhaustion is a split, not a complete.

@@ -2,5 +2,5 @@ WWL/1.1.0
 [IDEA] 
 [LOCKS] none
 [SPINE] BIBLE
-[TASK] Deliver a complete verbose summary of this system (parts, functions, features, abilities, capabilities) then execute SPINE_BIBLE in gated phases: work then deliver each phase.
+[TASK] Deliver a complete verbose summary of this system (parts, functions, features, abilities, capabilities) then execute SPINE_BIBLE in gated phases: work then deliver each phase. Complete all required artifacts for each phase (all code files + the phase artifact), apply all updates and optimizations, and fix all errors and defects at the appropriate times during the run.
 [NEXT] Proceed Phase 01 IDEA as if the Best Next Prompt for that phase was just delivered.
